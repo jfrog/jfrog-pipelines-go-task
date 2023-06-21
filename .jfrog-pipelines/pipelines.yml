@@ -1,0 +1,46 @@
+template: true   # required for local templates
+valuesFilePath: ./values.yml
+
+resources:
+  - name: {{ .Values.primaryResource }}
+    type: GitRepo
+    configuration:
+      path: {{ .Values.repoPath }}
+      gitProvider: {{ .Values.gitProvider }}
+      branches:
+        include: ^{{ .Values.mainBranch }}$
+      cloneProtocol: {{ .Values.protocol }}
+      buildOn:
+        commit: {{ .Values.buildOnCommit }}
+
+pipelines:
+  - name: {{ .Values.pipelineName }}
+    configuration:
+      jfrogCliVersion: 2
+      environmentVariables:
+        readOnly:
+          JFROG_TASK_DEBUG: "true"
+          JFROG_CLI_LOG_LEVEL: debug
+    steps:
+      - name: test_{{.Values.taskName }}
+        type: Bash
+        configuration:
+          inputResources:
+            - name: {{ .Values.primaryResource }}
+          integrations:
+            - name: {{ .Values.artifactory }}
+        execution:
+          onStart:
+            - echo "Starting execution on {{ .Values.taskName }}"
+          onExecute:
+            - task: $res_{{ .Values.primaryResource }}_resourcePath
+              id: my-awesome-task
+              input:
+                input1:
+                input2:
+          onFailure:
+            - echo "Task Test failed"
+          onSuccess:
+            - echo "Test Task execution is a success without any errors"
+          onComplete:
+            - echo "Test Task execution completed."
