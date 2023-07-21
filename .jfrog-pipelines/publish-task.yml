@@ -1,0 +1,77 @@
+template: true
+valuesFilePath: ./values.yml
+
+resources:
+  - name: {{ .Values.primaryResource }}
+    type: GitRepo
+    configuration:
+      path: {{ .Values.repoPath }}
+      gitProvider: {{ .Values.gitProvider }}
+      branches:
+        include: ^{{ .Values.mainBranch }}$
+      cloneProtocol: {{ .Values.protocol }}
+      buildOn:
+        commit: {{ .Values.publishOnCommit }}
+
+pipelines:
+  - name: {{ .Values.pipelineName }}_publish
+    configuration:
+      jfrogCliVersion: 2
+      environmentVariables:
+        readOnly:
+          TASK_NAME: {{ .Values.taskName }}
+          TASK_VERSION: 0.0.1
+          TASK_REPOSITORY: pipelines-tasks-local
+          RESOLVE_REPO: npm-virtual
+          JFROG_TASK_DEBUG: "true"
+          JFROG_CLI_LOG_LEVEL: debug
+    steps:
+      - name: build_and_publish_task
+        type: Bash
+        configuration:
+          inputResources:
+            - name: {{ .Values.primaryResource }}
+              trigger: false
+          integrations:
+            - name: {{ .Values.artifactory }}
+        execution:
+          onExecute:
+            # Make sure version was provided
+            - test -n "$TASK_VERSION" -a "$TASK_VERSION" != "0.0.0"
+            - pushd $res_{{ .Values.primaryResource }}_resourcePath
+            # Configure JFrog CLI
+            - jfrog npmc --repo-resolve $RESOLVE_REPO
+            # Install npm dependencies
+            - jfrog npm install
+            # Build task runnable script bundled with dependencies
+            - npm run dist
+            - popd
+            # Run publish task
+            - task: jfrog/publish-task@latest
+              id: publish-{{ .Values.taskName }}
+              input:
+                path: $res_{{ .Values.primaryResource }}_resourcePath
+                targetRepository: $TASK_REPOSITORY
+                taskName: $TASK_NAME
+                taskVersion: $TASK_VERSION
+                includePattern: ^README.md$|^dist
+
+      - name: test_published_task
+        type: Bash
+        configuration:
+          inputSteps:
+            - name: build_and_publish_task
+          integrations:
+            - name: {{ .Values.artIntegration }}
+        execution:
+          onExecute:
+            # Run task
+            - task: $TASK_NAME@v$TASK_VERSION
+              id: my-{{ .Values.taskName }}
+              input:
+                name: "dev"
+
+            # Run other commands after task
+            - echo "my task done"
+          onComplete:
+            - echo "Step done!"

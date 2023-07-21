@@ -11,7 +11,7 @@ output:
   - name: status
     description: status message of the task
 execution:
-  - echo "this is my awesome task"
+  - bin/taskName-${JFROG_OPERATING_SYSTEM_FAMILY}-${JFROG_ARCHITECTURE}
 hooks:
   onStepSuccess:
     - echo "injecting from task into step onSuccess"
