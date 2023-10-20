@@ -39,12 +39,9 @@ pipelines:
             # Make sure version was provided
             - test -n "$TASK_VERSION" -a "$TASK_VERSION" != "0.0.0"
             - pushd $res_{{ .Values.primaryResource }}_resourcePath
-            # Configure JFrog CLI
-            - jfrog npmc --repo-resolve $RESOLVE_REPO
+            # Run do-all target to perform build and test
+            - make do-all
             # Install npm dependencies
-            - jfrog npm install
-            # Build task runnable script bundled with dependencies
-            - npm run dist
             - popd
             # Run publish task
             - task: jfrog/publish-task@latest
@@ -54,8 +51,7 @@ pipelines:
                 targetRepository: $TASK_REPOSITORY
                 taskName: $TASK_NAME
                 taskVersion: $TASK_VERSION
-                includePattern: ^README.md$|^dist
-
+                includePattern: ^README.md$|^RELEASE.md$|^bin
       - name: test_published_task
         type: Bash
         configuration:
@@ -70,7 +66,6 @@ pipelines:
               id: my-{{ .Values.taskName }}
               input:
                 name: "dev"
-
             # Run other commands after task
             - echo "my task done"
           onComplete:

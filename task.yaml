@@ -5,7 +5,7 @@ labels:
   - task
   - template
 input:
-  - name: input name
+  - name: inputName
     description: input description
 output:
   - name: status
