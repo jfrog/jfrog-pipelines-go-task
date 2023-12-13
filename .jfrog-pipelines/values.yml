@@ -1,5 +1,7 @@
 taskName:
+taskVersion: 0.0.1
 primaryResource:
+secondaryResource:
 gitProvider:
 artifactory: int_default_artifactory # rename if the artifactory integration is different
 repoPath:
@@ -7,3 +9,4 @@ mainBranch: main
 protocol: https
 buildOnCommit: true
 pipelineName:
+publishOnCommit: false

@@ -62,7 +62,7 @@ pipelines:
         execution:
           onExecute:
             # Run task
-            - task: $TASK_NAME@v$TASK_VERSION
+            - task: {{ .Values.taskName }}@v{{ .Values.taskVersion }}
               id: my-{{ .Values.taskName }}
               input:
                 name: "dev"
