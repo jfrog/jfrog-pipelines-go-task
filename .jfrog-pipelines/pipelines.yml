@@ -35,12 +35,15 @@ pipelines:
         execution:
           onStart:
             - echo "Starting execution on {{ .Values.taskName }}"
+            - task: jfrog/setup-go@latest
+              input:
+                version: "1.20.5" 
+            - pushd $res_{{ .Values.primaryResource }}_resourcePath
           onExecute:
             - task: $res_{{ .Values.primaryResource }}_resourcePath
-              id: my-awesome-task
+              id: my-task
               input:
-                input1:
-                input2:
+                user: "dev"
           onFailure:
             - echo "Task Test failed"
           onSuccess:

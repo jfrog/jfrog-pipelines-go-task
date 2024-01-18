@@ -60,28 +60,6 @@ pipelines:
             - echo "build and publishing task failed"
           onSuccess:
             - echo "task is built and published"
-      - name: test_published_task
-        type: Bash
-        configuration:
-          inputSteps:
-            - name: build_and_publish_task
-          integrations:
-            - name: {{ .Values.artifactoryIntegration }}
-        execution:
-          onExecute:
-            # Run task
-            - task: {{ .Values.taskName }}\@v{{ .Values.taskVersion }}
-              id: my-{{ .Values.taskName }}
-              input:
-                name: "dev"
-            # Run other commands after task
-            - echo "{{ .Values.taskName }} completed !!"
-          onComplete:
-            - echo "Step done!"
-          onFailure:
-            - echo "testing published task failed"
-          onSuccess:
-            - echo "testing of published task {{ .Values.taskName }}" completed
       {{ if .Values.windowsNodePool }}
       - name: test_published_task_windows
         type: Powershell
@@ -96,7 +74,7 @@ pipelines:
             - task: {{ .Values.taskName }}\@v{{ .Values.taskVersion }}
               id: my-{{ .Values.taskName }}
               input:
-                name: "dev"
+                user: "dev"
             # Run other commands after task
             - echo "{{ .Values.taskName }} completed !!"
           onComplete:
@@ -105,4 +83,27 @@ pipelines:
             - echo "testing published task failed"
           onSuccess:
             - echo "testing of published task {{ .Values.taskName }}" completed
-      {{end}}
+      {{ else }}
+      - name: test_published_task
+        type: Bash
+        configuration:
+          inputSteps:
+            - name: build_and_publish_task
+          integrations:
+            - name: {{ .Values.artifactoryIntegration }}
+        execution:
+          onExecute:
+            # Run task
+            - task: {{ .Values.taskName }}\@v{{ .Values.taskVersion }}
+              id: my-{{ .Values.taskName }}
+              input:
+                user: "dev"
+            # Run other commands after task
+            - echo "{{ .Values.taskName }} completed !!"
+          onComplete:
+            - echo "Step done!"
+          onFailure:
+            - echo "testing published task failed"
+          onSuccess:
+            - echo "testing of published task {{ .Values.taskName }}" completed
+      {{ end }}

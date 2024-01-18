@@ -1,10 +1,15 @@
 package main
 
-import "github.com/jfrog/jfrog-pipelines-tasks-sdk-go/tasks"
+import (
+	"fmt"
+
+	"github.com/jfrog/jfrog-pipelines-tasks-sdk-go/tasks"
+)
 
 func main() {
 	tasks.Info("Starting task ...")
-	status := "success"
+	userName := tasks.GetInput("user")
+	message := fmt.Sprintf("Hello %s from pipelines tasks 😊", userName)
 	// Set greeting message as task output
-	tasks.SetOutput("status", status)
+	tasks.SetOutput("message", message)
 }
