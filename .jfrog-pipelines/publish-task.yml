@@ -22,7 +22,7 @@ pipelines:
       {{ end }}
       environmentVariables:
         readOnly:
-          TASK_NAME: {{ .Values.taskName }}
+          TASK_NAME: jfrog/{{ .Values.taskName }}
           TASK_VERSION: 0.0.1
           TASK_REPOSITORY: pipelines-tasks-local
           RESOLVE_REPO: npm-virtual
@@ -34,7 +34,6 @@ pipelines:
         configuration:
           inputResources:
             - name: {{ .Values.primaryResource }}_publish
-              trigger: false
           integrations:
             - name: {{ .Values.artifactoryIntegration }}
         execution:
@@ -43,7 +42,6 @@ pipelines:
             - test -n "$TASK_VERSION" -a "$TASK_VERSION" != "0.0.0"
             - pushd $res_{{ .Values.primaryResource }}_publish_resourcePath
             # Run do-all target to perform build and test
-            - make do-all-ci
             - popd
             # Run publish task
             - task: jfrog/publish-task@latest
@@ -71,7 +69,7 @@ pipelines:
         execution:
           onExecute:
             # Run task
-            - task: {{ .Values.taskName }}\@v{{ .Values.taskVersion }}
+            - task: jfrog/{{ .Values.taskName }}@v{{ .Values.taskVersion }}
               id: my-{{ .Values.taskName }}
               input:
                 user: "dev"
@@ -94,7 +92,7 @@ pipelines:
         execution:
           onExecute:
             # Run task
-            - task: {{ .Values.taskName }}\@v{{ .Values.taskVersion }}
+            - task: jfrog/{{ .Values.taskName }}@v{{ .Values.taskVersion }}
               id: my-{{ .Values.taskName }}
               input:
                 user: "dev"
