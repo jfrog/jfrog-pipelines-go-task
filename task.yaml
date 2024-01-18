@@ -1,15 +1,15 @@
-name: taskName
-description: taskDescription
+name: example-task
+description: Pipelines task for installing go
 source: https://github.com/jfrog/jfrog-pipelines-task
-labels:
-  - task
-  - template
+labels: # labels users can associate the task with
+  - example
+  - go
 input:
-  - name: inputName
-    description: input description
+  - name: version
+    description: version of go to be installed
 output:
-  - name: status
-    description: status message of the task
+  - name: exampleOutput
+    description: what does task set this value with
 execution:
   - bin/taskName-${JFROG_OPERATING_SYSTEM_FAMILY}-${JFROG_ARCHITECTURE}
 hooks:

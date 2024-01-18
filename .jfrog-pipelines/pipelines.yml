@@ -17,6 +17,9 @@ pipelines:
   - name: {{ .Values.pipelineName }}
     configuration:
       jfrogCliVersion: 2
+      {{ if .Values.nodePool }}
+      nodePool: {{ .Values.nodePool }}
+      {{ end }}
       environmentVariables:
         readOnly:
           JFROG_TASK_DEBUG: "true"
@@ -28,7 +31,7 @@ pipelines:
           inputResources:
             - name: {{ .Values.primaryResource }}
           integrations:
-            - name: {{ .Values.artifactory }}
+            - name: {{ .Values.artifactoryIntegration }}
         execution:
           onStart:
             - echo "Starting execution on {{ .Values.taskName }}"
@@ -41,6 +44,39 @@ pipelines:
           onFailure:
             - echo "Task Test failed"
           onSuccess:
-            - echo "Test Task execution is a success without any errors"
+            - echo "Test Task execution is successful"
           onComplete:
             - echo "Test Task execution completed."
+  {{ if .Values.windowsNodePool }}
+  - name: {{ .Values.pipelineName }}_windows
+    configuration:
+      jfrogCliVersion: 2
+      nodePool: {{ .Values.windowsNodePool }}
+      environmentVariables:
+        readOnly:
+          JFROG_TASK_DEBUG: "true"
+          JFROG_CLI_LOG_LEVEL: debug
+    steps:
+      - name: test_{{.Values.taskName }}
+        type: Powershell
+        configuration:
+          inputResources:
+            - name: {{ .Values.primaryResource }}
+          integrations:
+            - name: {{ .Values.artifactoryIntegration }}
+        execution:
+          onStart:
+            - echo "Starting execution on {{ .Values.taskName }}"
+          onExecute:
+            - task: $res_{{ .Values.primaryResource }}_resourcePath
+              id: my-awesome-task
+              input:
+                input1:
+                input2:
+          onFailure:
+            - echo "Task Test failed"
+          onSuccess:
+            - echo "Test Task execution is successful"
+          onComplete:
+            - echo "Test Task execution completed."
+  {{end}}
