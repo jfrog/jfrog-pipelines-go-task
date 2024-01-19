@@ -1,12 +1,12 @@
-taskName:
-taskVersion: 0.0.1
-primaryResource:
-secondaryResource:
-gitProvider:
-artifactoryIntegration: int_default_artifactory # rename if the artifactory integration is different
-repoPath:
-mainBranch: main
+taskName: # [REQUIRED] unique task name
+taskVersion: 0.0.1 # [REQUIRED] version of the task to be published used on publish pipeline
+primaryResource: # [REQUIRED] resource name
+secondaryResource: # secondary resource incase there are multiple resources
+gitProvider: # [REQUIRED] git integration name
+artifactoryIntegration: int_default_artifactory # [REQUIRED]rename if the artifactory integration is different
+repoPath: # [REQUIRED] repository path of resource
+mainBranch: main # [REQUIRED] branch name of the repository
 protocol: https
-buildOnCommit: true
-pipelineName:
-publishOnCommit: false
+buildOnCommit: true # to trigger a pipeline run on each commit
+pipelineName: # [REQUIRED] unique pipeline name
+publishOnCommit: false # to publish and test published task on each run

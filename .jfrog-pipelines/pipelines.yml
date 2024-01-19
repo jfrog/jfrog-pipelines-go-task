@@ -41,9 +41,10 @@ pipelines:
             - pushd $res_{{ .Values.primaryResource }}_resourcePath
           onExecute:
             - task: $res_{{ .Values.primaryResource }}_resourcePath
-              id: my-task
+              id: mytask
               input:
                 user: "dev"
+            - echo ${OUT_mytask_message}
           onFailure:
             - echo "Task Test failed"
           onSuccess:
