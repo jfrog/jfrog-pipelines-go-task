@@ -40,8 +40,15 @@ pipelines:
           onExecute:
             # Make sure version is provided
             - test -n "$TASK_VERSION" -a "$TASK_VERSION" != "0.0.0"
+            - task: jfrog/setup-go@latest
+              input:
+                version: "1.20.5" 
             - pushd $res_{{ .Values.primaryResource }}_publish_resourcePath
             # Run do-all target to perform build and test
+            - export GOPROXY="https://$int_{{ .Values.artifactoryIntegration }}_user:$int_{{ .Values.artifactoryIntegration }}_apikey@pipelineslnp1.jfrogdev.org//artifactory/api/go/pipe-go-tasks-sdk-virtual/"
+            - export GONOSUMDB="github.com/jfrog/*"
+            - go mod tidy
+            - make build-all
             - popd
             # Run publish task
             - task: jfrog/publish-task@latest
