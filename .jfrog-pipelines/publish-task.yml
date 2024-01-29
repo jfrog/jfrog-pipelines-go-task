@@ -48,7 +48,7 @@ pipelines:
             - export GOPROXY="https://$int_{{ .Values.artifactoryIntegration }}_user:$int_{{ .Values.artifactoryIntegration }}_apikey@pipelineslnp1.jfrogdev.org//artifactory/api/go/pipe-go-tasks-sdk-virtual/"
             - export GONOSUMDB="github.com/jfrog/*"
             - go mod tidy
-            - make build-all
+            - make build-linux
             - popd
             # Run publish task
             - task: jfrog/publish-task@latest
