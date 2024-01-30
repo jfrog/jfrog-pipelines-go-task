@@ -17,7 +17,7 @@ build-linux:
 	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build $(ARGS) -o bin/taskName-linux-x86_64
 
 build-linux-taskverse:
-	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build $(ARGS) -o bin/probable_invention-linux-x86_64
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build $(ARGS) -o bin/taskName-linux-x86_64
 
 build-mac:
 	GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go build $(ARGS)
