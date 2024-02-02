@@ -59,6 +59,7 @@ pipelines:
                 taskName: $TASK_NAME
                 taskVersion: $TASK_VERSION
                 includePattern: ^README.md$|^RELEASE.md$|^bin
+            - echo ${OUT_mytask_message}
           onComplete:
             - echo "step done!"
           onFailure:

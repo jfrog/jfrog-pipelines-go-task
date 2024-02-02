@@ -1,4 +1,4 @@
-# Jfrog-Pipelines-Task
+# {{ .name }}
 
 This JFrog pipelines task performs this action.
  
@@ -26,9 +26,9 @@ Give some sample configuration for running
 **Basic:**
 
 ```yaml
-- task: jfrog/pipelines-task@v0.0.1
+- task: jfrog/{{ .name }}@v0.0.1
   repository: pipelines-tasks-virtual
-  id: my-awesome-task
+  id: pipe_{{ .name }}
   input:
     input1: value1
     input2: value2
