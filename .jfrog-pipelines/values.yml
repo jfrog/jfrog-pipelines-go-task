@@ -1,12 +1,12 @@
-taskName: {{ .name }} # [REQUIRED] unique task name
+taskName: {{ .Name }} # [REQUIRED] unique task name
 taskVersion: 0.0.1 # [REQUIRED] version of the task to be published used on publish pipeline
-primaryResource: res_{{ .name }} # [REQUIRED] resource name
+primaryResource: res_{{ .Name }} # [REQUIRED] resource name
 secondaryResource: # secondary resource incase there are multiple resources
-gitProvider: {{ .gitIntegration }}# [REQUIRED] git integration name
-artifactoryIntegration: {{ .rtIntegration }} # [REQUIRED]rename if the artifactory integration is different
+gitProvider: {{ .GitIntegration }}# [REQUIRED] git integration name
+artifactoryIntegration: {{ .RtIntegration }} # [REQUIRED]rename if the artifactory integration is different
 repoPath: # [REQUIRED] repository path of resource
-mainBranch: {{ .branch }} # [REQUIRED] branch name of the repository
+mainBranch: {{ .Branch }} # [REQUIRED] branch name of the repository
 protocol: https
 buildOnCommit: true # to trigger a pipeline run on each commit
-pipelineName: test_{{ .name }}# [REQUIRED] unique pipeline name
+pipelineName: test_{{ .Name }}# [REQUIRED] unique pipeline name
 publishOnCommit: true # to publish and test published task on each run
