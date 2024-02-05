@@ -1,15 +1,21 @@
 package main
 
 import (
-	"fmt"
+	"jfrog-pipelines-go-task/app"
+	"os"
 
 	"github.com/jfrog/jfrog-pipelines-tasks-sdk-go/tasks"
 )
 
 func main() {
-	tasks.Info("Starting task ...")
-	userName := tasks.GetInput("user")
-	message := fmt.Sprintf("Hello %s from pipelines tasks 😊", userName)
-	// Set greeting message as task output
-	tasks.SetOutput("message", message)
+	tasks.Info("Starting {{ .Name }} ...")
+	err := app.Run()
+	if err != nil {
+		Exit(err)
+	}
+}
+
+func Exit(err error) {
+	tasks.Error(err.Error())
+	os.Exit(1)
 }
