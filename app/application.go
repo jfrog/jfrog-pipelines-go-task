@@ -53,14 +53,15 @@ func GetIntegrationValue(i Inputs) (string, error) {
 
 // AUTO Generated
 // GetResourceValue
-func GetResourceValue(i Inputs) (string, error) {
+func GetResourceValue(i Inputs) (string, string, error) {
 	// Pass the input name expected to get resource
 	resource, err := tasks.GetResource()
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 	// returns ResourcePath
 	resourcePath := resource.ResourcePath
 	// returns resource type
 	resourceType := resource.ResourceType
+	return resourcePath, resourceType, nil
 }
