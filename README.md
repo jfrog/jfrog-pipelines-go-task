@@ -31,7 +31,7 @@ Give some sample configuration for running
   id: pipe_{{ .Name }}
   input:
     {{ range .Inputs }}
-    {{ .name }}: value
+    {{ .Name }}: value
     {{ end }}
 ```
 
