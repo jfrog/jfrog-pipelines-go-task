@@ -33,7 +33,7 @@ func (i *Inputs) validateInputs() error {
 // AUTO Generated
 // SetTaskOutputs sets tasks outputs
 func SetTaskOutputs(output... string) {
-	{{- i := range .Outputs }}
+	{{- range $i, $a := .Outputs }}
 	tasks.SetOutput("{{ .Name }}", output[{{ $i }}])
 	{{- end}}
 }
