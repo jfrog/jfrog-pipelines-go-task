@@ -30,18 +30,18 @@ Give some sample configuration for running
   repository: pipelines-tasks-virtual
   id: pipe_{{ .Name }}
   input:
-    {{ range .Inputs }}
+    {{- range .Inputs }}
     {{ .Name }}: value
-    {{ end }}
+    {{- end }}
 ```
 
 ### Input Variables
 
 | Name                        | Required | Default                               | Description                     |
 |-----------------------------|----------|---------------------------------------|---------------------------------|
-{{ range .Inputs }}
+{{- range .Inputs }}
 | {{ .Name }}                  | {{ .Required }} | {{ .DefaultValue }}            | {{ .Description }}              |
-{{ end }}
+{{- end }}
 
 ### Exported Environment Variables
 

@@ -6,17 +6,17 @@ labels: # labels users can associate the task with
   - hello
   - world
 input:
-  {{ range .Inputs }}
+  {{- range .Inputs }}
   - name: {{ .Name }}
     description: {{ .Description }}
     required: {{ .Required }}
     default: {{ .DefaultValue }}
-  {{ end }}
+  {{- end }}
 output:
-  {{ range .Outputs }}
+  {{- range .Outputs }}
   - name: {{ .Name }}
     description: {{ .Description }}
-  {{ end }}
+  {{- end }}
 execution:
   - bin/{{ .Name }}-${JFROG_OPERATING_SYSTEM_FAMILY}-${JFROG_ARCHITECTURE}
 hooks:
