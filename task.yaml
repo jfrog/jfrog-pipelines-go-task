@@ -10,7 +10,7 @@ input:
   - name: {{ .Name }}
     description: {{ .Description }}
     required: {{ .Required }}
-    default: {{ .Default }}
+    default: {{ .DefaultValue }}
   {{ end }}
 output:
   {{ range .Outputs }}
