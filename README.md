@@ -1,4 +1,4 @@
-# {{ .name }}
+# {{ .Name }}
 
 This JFrog pipelines task performs this action.
  
@@ -26,25 +26,30 @@ Give some sample configuration for running
 **Basic:**
 
 ```yaml
-- task: jfrog/{{ .name }}@v0.0.1
+- task: jfrog/{{ .Name }}@v0.0.1
   repository: pipelines-tasks-virtual
-  id: pipe_{{ .name }}
+  id: pipe_{{ .Name }}
   input:
-    input1: value1
-    input2: value2
+    {{ range .Inputs }}
+    {{ .name }}: value
+    {{ end }}
 ```
 
 ### Input Variables
 
 | Name                        | Required | Default                               | Description                     |
 |-----------------------------|----------|---------------------------------------|---------------------------------|
-| inputA                      | true     |                                       | Simple description about inputA |
-| inputB                      | false    | false                                 | Simple description about inputB |
-
+{{ range .Inputs }}
+| {{ .Name }}                  | {{ .Required }} | {{ .DefaultValue }}            | {{ .Description }}              |
+{{ end }}
 
 ### Exported Environment Variables
 
-Mention all the environment variables which the task exports
+#### Output Variables
+
+{{ range .Outputs }}
+- {{ .Name }}
+{{ end }}
 
 ### How does it work?
 
